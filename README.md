@@ -15,7 +15,9 @@ Go to the course URL posted on Canvas. TYCHO runs entirely in your browser — n
 TYCHO needs an AI provider to power its responses. You connect your own key — it stays in your browser and is never shared or stored anywhere else. Choose any one of the providers below. **Groq is recommended** — it is the fastest to set up and completely free.
 
 ### Step 3 — Enter your key
-Click the **API Key** button in the top right corner of TYCHO. Select your provider, paste your key, and click **Save Key**. You only need to do this once per browser.
+Click the **API Key** button in the top right corner of TYCHO. Pick your provider from the dropdown (TYCHO auto-selects it when it recognizes your key format), optionally adjust the model name, paste your key, and click **Save & Test**. TYCHO sends one small test message and shows **"✓ Ready"** when the connection works — you know immediately whether your key is good. You only need to do this once per browser.
+
+If a provider retires a model name, just type the new model name in the Model field — no code changes needed.
 
 ### Step 4 — Choose a mode
 Use the **Mode** dropdown in the header to select how much guidance you want:
@@ -68,7 +70,31 @@ DeepSeek is a capable reasoning model with a generous free tier.
 2. Sign up with your email
 3. Go to **API Keys** → **Create new API key**
 4. Copy the key
-5. In TYCHO: select **DeepSeek**, paste the key, click Save
+5. In TYCHO: select **DeepSeek**, paste the key, click Save & Test
+
+---
+
+### Cerebras — Free, very fast
+Cerebras runs open models on wafer-scale hardware with a generous free tier.
+
+1. Go to [cloud.cerebras.ai](https://cloud.cerebras.ai)
+2. Sign up with your email
+3. Generate an API key (starts with `csk-`)
+4. In TYCHO: select **Cerebras**, paste the key, click Save & Test
+
+---
+
+### Local — Ollama (no key, no internet, fully private)
+Run a model on your own computer. No API key, no rate limits, works offline.
+
+1. Install [Ollama](https://ollama.com) (Mac/Windows/Linux)
+2. In a terminal: `ollama pull llama3.2`
+3. Start Ollama with browser access enabled:
+   - Mac/Linux: `OLLAMA_ORIGINS="*" ollama serve`
+   - Windows: set the `OLLAMA_ORIGINS` environment variable to `*` then restart Ollama
+4. In TYCHO: select **Local — Ollama**, leave the key blank, click Save & Test
+
+Note: local models are smaller and noticeably weaker at physics reasoning than cloud models. Fine for definitions and study review; expect weaker guidance on multi-step problems.
 
 ---
 
