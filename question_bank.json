@@ -1,0 +1,241 @@
+{
+  "course": "AERSP 450",
+  "version": "2026-07-07 draft — REVIEW BEFORE RELEASE",
+  "topics": [
+    {
+      "id": "twobody",
+      "label": "Ch. 2 — Two-Body Problem & Orbital Energy",
+      "query": "two-body problem orbital energy angular momentum conic sections vis-viva",
+      "flashcards": [
+        {"front": "What is the governing equation of the two-body problem?", "back": "\\( \\ddot{\\mathbf{r}} = -\\dfrac{\\mu}{r^3}\\mathbf{r} \\) — relative motion of a satellite about the central body, with gravitational parameter \\( \\mu = GM \\)."},
+        {"front": "State the vis-viva equation and what it connects.", "back": "\\( v^2 = \\mu\\left(\\dfrac{2}{r} - \\dfrac{1}{a}\\right) \\). It connects speed and radial distance anywhere on an orbit of semimajor axis \\( a \\), via conservation of energy."},
+        {"front": "What is the specific orbital energy and how does it relate to \\( a \\)?", "back": "\\( \\varepsilon = \\dfrac{v^2}{2} - \\dfrac{\\mu}{r} = -\\dfrac{\\mu}{2a} \\). Negative for ellipses, zero for parabolas, positive for hyperbolas."},
+        {"front": "Why is specific angular momentum \\( \\mathbf{h} = \\mathbf{r} \\times \\mathbf{v} \\) constant in the two-body problem?", "back": "Gravity is a central force — it acts along \\( \\mathbf{r} \\), so it produces zero torque about the attracting body, and angular momentum is conserved. This is why the orbit stays in a fixed plane."},
+        {"front": "What is the trajectory (conic) equation in terms of true anomaly?", "back": "\\( r = \\dfrac{p}{1 + e\\cos\\nu} \\) with semilatus rectum \\( p = h^2/\\mu = a(1-e^2) \\). The eccentricity \\( e \\) selects the conic type."},
+        {"front": "How do periapsis and apoapsis radii relate to \\( a \\) and \\( e \\)?", "back": "\\( r_p = a(1-e) \\) and \\( r_a = a(1+e) \\); adding them gives \\( r_p + r_a = 2a \\) — the geometric definition of the semimajor axis."},
+        {"front": "What is the orbital period of an elliptical orbit?", "back": "\\( T = 2\\pi\\sqrt{a^3/\\mu} \\) — Kepler's third law. Period depends only on the semimajor axis, not eccentricity."},
+        {"front": "What are circular and escape speeds at radius \\( r \\)?", "back": "\\( v_c = \\sqrt{\\mu/r} \\) and \\( v_{esc} = \\sqrt{2\\mu/r} = \\sqrt{2}\\,v_c \\). Escape corresponds to zero total energy (parabolic)."}
+      ],
+      "quiz": [
+        {"question": "A satellite's speed at some point equals the local escape speed. Its orbit is:", "options": ["Elliptical", "Circular", "Parabolic", "Hyperbolic"], "correctIndex": 2, "explanation": "Escape speed corresponds to exactly zero specific energy \\( \\varepsilon = 0 \\), which is the parabolic case."},
+        {"question": "Two elliptical orbits around Earth have the same semimajor axis but different eccentricities. Their periods are:", "options": ["Equal", "Longer for the more eccentric orbit", "Shorter for the more eccentric orbit", "Cannot be determined"], "correctIndex": 0, "explanation": "\\( T = 2\\pi\\sqrt{a^3/\\mu} \\) depends only on \\( a \\), not on \\( e \\)."},
+        {"question": "Where on an elliptical orbit is the satellite's speed greatest?", "options": ["Apoapsis", "Periapsis", "At the ends of the minor axis", "Speed is constant"], "correctIndex": 1, "explanation": "From vis-viva, smaller \\( r \\) gives larger \\( v \\); the minimum radius is periapsis. Equivalently, conservation of angular momentum \\( r v_\\perp = h \\)."},
+        {"question": "The specific energy of a bound (elliptical) orbit is:", "options": ["Positive", "Zero", "Negative", "Sign depends on eccentricity"], "correctIndex": 2, "explanation": "\\( \\varepsilon = -\\mu/(2a) < 0 \\) for any ellipse since \\( a > 0 \\). Positive energy means hyperbolic escape."}
+      ]
+    },
+    {
+      "id": "elements",
+      "label": "Ch. 3 — Orbital Elements & Coordinate Frames",
+      "query": "classical orbital elements inclination RAAN argument of perigee coordinate transformation ECI",
+      "flashcards": [
+        {"front": "Name the six classical orbital elements and what each fixes.", "back": "\\( a \\) size, \\( e \\) shape, \\( i \\) plane tilt, \\( \\Omega \\) (RAAN) plane swivel about the pole, \\( \\omega \\) orientation of periapsis in the plane, \\( \\nu \\) (or \\( M \\)) position along the orbit."},
+        {"front": "What is the ascending node and how is RAAN measured?", "back": "The point where the satellite crosses the equatorial plane going north. RAAN \\( \\Omega \\) is measured eastward in the equatorial plane from the vernal equinox direction to the node."},
+        {"front": "How do you compute the node vector \\( \\mathbf{n} \\)?", "back": "\\( \\mathbf{n} = \\hat{\\mathbf{K}} \\times \\mathbf{h} \\) — the cross product of the polar axis with the angular momentum vector points toward the ascending node."},
+        {"front": "What distinguishes ECI from ECEF frames?", "back": "ECI is inertial (non-rotating, fixed to the stars via the equinox); ECEF rotates with Earth. Orbit propagation uses ECI; ground-station and ground-track work uses ECEF."},
+        {"front": "What is the perifocal (PQW) frame?", "back": "An orbit-fixed frame: \\( \\hat{\\mathbf{p}} \\) toward periapsis, \\( \\hat{\\mathbf{q}} \\) 90° ahead in the direction of motion, \\( \\hat{\\mathbf{w}} = \\hat{\\mathbf{h}} \\) normal to the orbit plane. Natural frame for writing \\( \\mathbf{r}(\\nu) \\)."},
+        {"front": "For which orbits are \\( \\Omega \\) or \\( \\omega \\) undefined?", "back": "\\( \\Omega \\) is undefined for equatorial orbits (\\( i = 0 \\), no node); \\( \\omega \\) is undefined for circular orbits (\\( e = 0 \\), no periapsis). Alternate elements handle these singular cases."},
+        {"front": "How is inclination computed from \\( \\mathbf{h} \\)?", "back": "\\( \\cos i = h_K / h \\) — the angle between the angular momentum vector and the polar axis \\( \\hat{\\mathbf{K}} \\). \\( i > 90° \\) means retrograde."}
+      ],
+      "quiz": [
+        {"question": "An orbit with inclination \\( i = 98° \\) is:", "options": ["Equatorial", "Prograde", "Retrograde", "Polar exactly"], "correctIndex": 2, "explanation": "Inclination above 90° means the orbit's angular momentum has a southward component — retrograde. (98° is typical for sun-synchronous orbits.)"},
+        {"question": "Which orbital element is undefined for a circular orbit?", "options": ["Inclination", "RAAN", "Argument of perigee", "Semimajor axis"], "correctIndex": 2, "explanation": "With \\( e = 0 \\) there is no periapsis, so \\( \\omega \\) has no meaning; argument of latitude is used instead."},
+        {"question": "Given state vectors \\( \\mathbf{r}, \\mathbf{v} \\) in ECI, the eccentricity vector points:", "options": ["Along the velocity", "Toward apoapsis", "Toward periapsis", "Normal to the orbit plane"], "correctIndex": 2, "explanation": "\\( \\mathbf{e} = \\frac{1}{\\mu}\\left[(v^2 - \\mu/r)\\mathbf{r} - (\\mathbf{r}\\cdot\\mathbf{v})\\mathbf{v}\\right] \\) points from focus to periapsis, with magnitude \\( e \\)."},
+        {"question": "The RTN (radial–transverse–normal) frame is most useful for:", "options": ["Describing ground stations", "Expressing perturbations and maneuver directions relative to the orbit", "Star catalogs", "Defining the equinox"], "correctIndex": 1, "explanation": "RTN rides along with the satellite, so thrust and perturbation components have direct orbital meaning (e.g., transverse burns change energy most efficiently)."}
+      ]
+    },
+    {
+      "id": "kepler",
+      "label": "Ch. 4 — Kepler's Equation, TOF & F&G Solutions",
+      "query": "Kepler equation eccentric anomaly mean anomaly time of flight F and G Lagrange functions",
+      "flashcards": [
+        {"front": "State Kepler's equation and define each symbol.", "back": "\\( M = E - e\\sin E \\): mean anomaly \\( M = n(t - t_p) \\) grows linearly with time (mean motion \\( n = \\sqrt{\\mu/a^3} \\)); \\( E \\) is the eccentric anomaly; \\( e \\) the eccentricity."},
+        {"front": "Why does Kepler's equation require iteration?", "back": "It is transcendental in \\( E \\) — you cannot isolate \\( E \\) algebraically when going from time to position. Newton's method on \\( f(E) = E - e\\sin E - M \\) converges quickly."},
+        {"front": "How are true anomaly \\( \\nu \\) and eccentric anomaly \\( E \\) related?", "back": "\\( \\tan\\dfrac{\\nu}{2} = \\sqrt{\\dfrac{1+e}{1-e}}\\,\\tan\\dfrac{E}{2} \\); also \\( r = a(1 - e\\cos E) \\)."},
+        {"front": "What do the F&G (Lagrange) functions accomplish?", "back": "They propagate a state without solving for all elements: \\( \\mathbf{r} = F\\mathbf{r}_0 + G\\mathbf{v}_0 \\), \\( \\mathbf{v} = \\dot{F}\\mathbf{r}_0 + \\dot{G}\\mathbf{v}_0 \\). Valid because two-body motion stays in the plane spanned by \\( \\mathbf{r}_0, \\mathbf{v}_0 \\)."},
+        {"front": "Write \\( F \\) and \\( G \\) in terms of the change in true anomaly \\( \\Delta\\nu \\).", "back": "\\( F = 1 - \\dfrac{r}{p}(1-\\cos\\Delta\\nu) \\), \\( G = \\dfrac{r r_0 \\sin\\Delta\\nu}{\\sqrt{\\mu p}} \\)."},
+        {"front": "What identity must \\( F, G, \\dot{F}, \\dot{G} \\) always satisfy, and why?", "back": "\\( F\\dot{G} - \\dot{F}G = 1 \\) — conservation of angular momentum. A great numerical sanity check."},
+        {"front": "What is the direct problem vs. Kepler's problem?", "back": "Direct: given position (anomaly), find time — plug into Kepler's equation. Kepler's problem: given time, find position — requires iterating Kepler's equation for \\( E \\)."}
+      ],
+      "quiz": [
+        {"question": "Mean anomaly \\( M \\) is best described as:", "options": ["The actual angle from periapsis to the satellite", "A fictitious angle that grows uniformly in time", "The angle at the auxiliary circle", "The flight path angle"], "correctIndex": 1, "explanation": "\\( M = n(t-t_p) \\) advances at constant rate \\( n \\); it equals the true position angle only for circular orbits. \\( E \\) is the auxiliary-circle angle."},
+        {"question": "To find a satellite's position 2 hours after periapsis passage on an elliptical orbit, you must:", "options": ["Evaluate vis-viva", "Solve Kepler's equation iteratively for E", "Integrate the equations of motion numerically", "Use the node vector"], "correctIndex": 1, "explanation": "Time → \\( M \\) is direct, but \\( M \\to E \\) requires iterating the transcendental Kepler equation, then \\( E \\to \\nu \\to \\mathbf{r} \\)."},
+        {"question": "The F&G functions can propagate any two-body state as \\( \\mathbf{r} = F\\mathbf{r}_0 + G\\mathbf{v}_0 \\) because:", "options": ["Gravity is weak", "The motion remains in the plane of \\( \\mathbf{r}_0 \\) and \\( \\mathbf{v}_0 \\)", "The orbit is circular", "F and G are constants"], "correctIndex": 1, "explanation": "Angular momentum conservation confines motion to the initial plane, so \\( \\mathbf{r}_0, \\mathbf{v}_0 \\) form a (generally non-orthogonal) basis for the trajectory."},
+        {"question": "At \\( E = \\pi \\) (eccentric anomaly), the satellite is at:", "options": ["Periapsis", "Apoapsis", "The ascending node", "A point depending on \\( e \\)"], "correctIndex": 1, "explanation": "\\( r = a(1 - e\\cos E) \\) gives \\( r = a(1+e) = r_a \\) at \\( E = \\pi \\) — apoapsis, for any eccentricity."}
+      ]
+    },
+    {
+      "id": "perturb",
+      "label": "Ch. 5 — Perturbations & J2 Effects",
+      "query": "J2 oblateness perturbation secular nodal regression apsidal rotation atmospheric drag",
+      "flashcards": [
+        {"front": "What physical asymmetry does the \\( J_2 \\) term model?", "back": "Earth's equatorial bulge (oblateness). The extra equatorial mass exerts an out-of-plane torque-like perturbation on inclined orbits — the dominant non-spherical gravity effect."},
+        {"front": "What are the two main secular effects of \\( J_2 \\)?", "back": "(1) Nodal regression — RAAN drifts: \\( \\dot{\\Omega} \\propto -\\cos i \\) (westward for prograde orbits). (2) Apsidal rotation — argument of perigee \\( \\omega \\) rotates within the plane."},
+        {"front": "Which orbital elements experience NO secular change from \\( J_2 \\)?", "back": "\\( a, e, i \\) — on average \\( J_2 \\) does not change orbit size, shape, or tilt; it only rotates the orbit plane (\\( \\Omega \\)) and the ellipse within it (\\( \\omega \\))."},
+        {"front": "How does a sun-synchronous orbit exploit \\( J_2 \\)?", "back": "Choose \\( a, e, i \\) (slightly retrograde, \\( i \\approx 98° \\) in LEO) so \\( \\dot{\\Omega} \\approx +0.9856°/\\text{day} \\), matching Earth's motion around the sun — the orbit plane keeps a fixed local solar time."},
+        {"front": "At what inclination does apsidal rotation vanish?", "back": "The critical inclination, \\( i = 63.4° \\) (or 116.6°) — used by Molniya orbits to freeze apogee over high latitudes."},
+        {"front": "What does atmospheric drag do to an orbit, secularly?", "back": "Removes energy: \\( a \\) and \\( e \\) decay (orbit shrinks and circularizes), with the strongest effect at perigee where density is highest. Eventually leads to reentry."},
+        {"front": "Distinguish secular, long-period, and short-period perturbation effects.", "back": "Secular: grows linearly in time (accumulates forever). Long-period: oscillates over many orbits. Short-period: oscillates within one orbit. Mission design cares most about secular terms."}
+      ],
+      "quiz": [
+        {"question": "For a prograde LEO orbit, \\( J_2 \\) causes the ascending node to:", "options": ["Drift eastward", "Drift westward", "Stay fixed", "Oscillate with no net drift"], "correctIndex": 1, "explanation": "\\( \\dot{\\Omega} \\propto -\\cos i \\); for \\( i < 90° \\), \\( \\cos i > 0 \\), so the node regresses westward."},
+        {"question": "A sun-synchronous orbit requires an inclination:", "options": ["Exactly 90°", "Less than 90°", "Slightly greater than 90°", "Exactly 63.4°"], "correctIndex": 2, "explanation": "Eastward nodal drift (\\( \\dot{\\Omega} > 0 \\)) requires \\( \\cos i < 0 \\), i.e., a retrograde orbit — about 98° for typical LEO altitudes."},
+        {"question": "Which set of elements is secularly unchanged by \\( J_2 \\)?", "options": ["\\( \\Omega, \\omega \\)", "\\( a, e, i \\)", "\\( a, \\Omega \\)", "All six elements"], "correctIndex": 1, "explanation": "J2's secular effect is purely a rotation of the node and the apsidal line; size, shape, and inclination have no secular drift (to first order)."},
+        {"question": "Drag acting on an eccentric LEO orbit primarily:", "options": ["Raises apogee", "Lowers apogee while perigee changes little at first", "Increases inclination", "Rotates the node"], "correctIndex": 1, "explanation": "Drag acts mostly at perigee (densest air), which removes energy and lowers the opposite side of the orbit — apogee — circularizing it."}
+      ]
+    },
+    {
+      "id": "maneuvers",
+      "label": "Ch. 7 — Impulsive Maneuvers: Hohmann, Bi-elliptic, Plane Change",
+      "query": "Hohmann transfer bi-elliptic plane change delta-v impulsive maneuver",
+      "flashcards": [
+        {"front": "Describe the Hohmann transfer in one sentence.", "back": "A two-impulse transfer using an ellipse tangent to both circular orbits — burn at periapsis of the transfer ellipse to leave orbit 1, burn at apoapsis to circularize at orbit 2."},
+        {"front": "What is the semimajor axis of the Hohmann transfer ellipse?", "back": "\\( a_t = \\dfrac{r_1 + r_2}{2} \\) — periapsis touches the inner circle, apoapsis touches the outer circle."},
+        {"front": "How do you compute \\( \\Delta v_1 \\) for a Hohmann departure?", "back": "\\( \\Delta v_1 = v_{t,p} - v_{c1} = \\sqrt{\\mu\\left(\\frac{2}{r_1} - \\frac{1}{a_t}\\right)} - \\sqrt{\\frac{\\mu}{r_1}} \\). Both velocities are tangential, so magnitudes subtract directly."},
+        {"front": "What is the \\( \\Delta v \\) for a pure plane change of angle \\( \\theta \\) at speed \\( v \\)?", "back": "\\( \\Delta v = 2v\\sin(\\theta/2) \\). It grows with speed — which is why plane changes are done at apoapsis (or combined with other burns) where \\( v \\) is smallest."},
+        {"front": "When does a bi-elliptic transfer beat a Hohmann?", "back": "For large radius ratios (roughly \\( r_2/r_1 \\gtrsim 11.94 \\) for the pure limit). It uses three burns via a high intermediate apoapsis, trading time for \\( \\Delta v \\)."},
+        {"front": "Why combine a plane change with the circularization burn?", "back": "Vector addition: \\( \\Delta v = \\sqrt{v_1^2 + v_2^2 - 2v_1 v_2\\cos\\theta} \\) is cheaper than doing the two maneuvers separately — one combined burn beats the sum of two."},
+        {"front": "What does the 'impulsive' assumption mean?", "back": "The burn changes velocity instantaneously — position is unchanged during the burn. Valid when burn time is much shorter than the orbital period."}
+      ],
+      "quiz": [
+        {"question": "In a Hohmann transfer from LEO to GEO, the first burn is applied:", "options": ["At apogee of the transfer orbit", "At perigee of the transfer orbit, tangent to LEO", "Perpendicular to the velocity", "At the ascending node"], "correctIndex": 1, "explanation": "The transfer ellipse's perigee coincides with the initial circular orbit; the burn is tangential (along velocity) — the most energy-efficient direction."},
+        {"question": "Plane changes are cheapest when performed:", "options": ["At perigee", "Where orbital speed is lowest (apogee)", "At the equator always", "During launch only"], "correctIndex": 1, "explanation": "\\( \\Delta v = 2v\\sin(\\theta/2) \\) scales with speed, so rotating the velocity vector where \\( v \\) is smallest minimizes cost."},
+        {"question": "A Hohmann transfer between circular orbits takes how long?", "options": ["One full period of the transfer ellipse", "Half the period of the transfer ellipse", "A quarter period", "Depends on the burn magnitudes"], "correctIndex": 1, "explanation": "The spacecraft coasts from periapsis to apoapsis of the transfer ellipse — exactly half an orbit: \\( t = \\pi\\sqrt{a_t^3/\\mu} \\)."},
+        {"question": "The total \\( \\Delta v \\) of a combined burn (circularize + plane change) versus doing them separately is:", "options": ["Always larger", "Always smaller", "Equal", "Smaller only for small angles"], "correctIndex": 1, "explanation": "The law of cosines on the velocity triangle always beats the scalar sum — the combined burn cuts the corner in velocity space."}
+      ]
+    },
+    {
+      "id": "orbitdet",
+      "label": "Ch. 3–4 — Orbit Determination: Gibbs & Lambert",
+      "query": "Gibbs method orbit determination Lambert problem three position vectors boundary value",
+      "flashcards": [
+        {"front": "What inputs does the Gibbs method use, and what does it produce?", "back": "Three co-planar position vectors \\( \\mathbf{r}_1, \\mathbf{r}_2, \\mathbf{r}_3 \\) at unknown or known times → the velocity \\( \\mathbf{v}_2 \\) at the middle observation, from which all orbital elements follow."},
+        {"front": "What geometric fact underlies Gibbs?", "back": "All three position vectors must lie in the same orbital plane and on the same conic — Gibbs enforces the conic equation through vector combinations of the three positions."},
+        {"front": "State Lambert's problem.", "back": "Given two position vectors \\( \\mathbf{r}_1, \\mathbf{r}_2 \\) and the time of flight between them, find the connecting orbit (equivalently \\( \\mathbf{v}_1 \\)). It is a two-point boundary value problem."},
+        {"front": "Why does Lambert's problem require iteration?", "back": "Time of flight is a transcendental function of the orbit parameter (e.g., semimajor axis or universal variable) — like Kepler's equation, you must iterate to match the required TOF."},
+        {"front": "Where does Lambert's problem show up in mission design?", "back": "Targeting: interplanetary transfers (pork-chop plots are grids of Lambert solutions), rendezvous targeting, and preliminary orbit determination from two sightings with timing."},
+        {"front": "What is the 'short way / long way' ambiguity in Lambert?", "back": "Two paths connect \\( \\mathbf{r}_1 \\) to \\( \\mathbf{r}_2 \\): transfer angle \\( \\Delta\\nu < 180° \\) or \\( > 180° \\). The choice changes the solution and must be specified."}
+      ],
+      "quiz": [
+        {"question": "The Gibbs method fails or degrades when:", "options": ["The three position vectors are nearly coplanar", "The three position vectors are too close together (small separation angles)", "The orbit is circular", "The observations are in ECI"], "correctIndex": 1, "explanation": "Gibbs is a geometric method; closely spaced vectors make the conic fit ill-conditioned. (Coplanarity is required, not a failure mode — it's a validity check.)"},
+        {"question": "Lambert's problem is fundamentally a:", "options": ["Initial value problem", "Two-point boundary value problem", "Eigenvalue problem", "Linear least-squares problem"], "correctIndex": 1, "explanation": "Both endpoints are constrained (two positions + TOF); the unknown is the connecting trajectory — the definition of a BVP."},
+        {"question": "A pork-chop plot is a contour map of:", "options": ["Atmospheric density vs altitude", "Lambert-solution \\( \\Delta v \\) (or C3) over departure and arrival dates", "Eccentricity vs inclination", "Ground tracks"], "correctIndex": 1, "explanation": "Each grid point solves Lambert's problem for a departure/arrival date pair; contours of the resulting energy or \\( \\Delta v \\) locate launch windows."},
+        {"question": "The output of the Gibbs method is directly:", "options": ["All six orbital elements", "The velocity at the middle observation", "The orbit period", "The RAAN only"], "correctIndex": 1, "explanation": "Gibbs constructs \\( \\mathbf{v}_2 \\); with the state \\( (\\mathbf{r}_2, \\mathbf{v}_2) \\) in hand, the elements follow by the standard conversion."}
+      ]
+    },
+    {
+      "id": "relative",
+      "label": "Ch. 8 — Relative Motion & CW Equations",
+      "query": "Clohessy-Wiltshire equations relative motion rendezvous LVLH proximity operations",
+      "flashcards": [
+        {"front": "What do the Clohessy–Wiltshire (CW) equations describe?", "back": "Linearized relative motion of a chaser about a target in a circular orbit, written in the rotating LVLH frame. Valid for small separations relative to orbit radius."},
+        {"front": "Write the CW equations (target in circular orbit, mean motion \\( n \\)).", "back": "\\( \\ddot{x} - 3n^2 x - 2n\\dot{y} = 0 \\), \\( \\ddot{y} + 2n\\dot{x} = 0 \\), \\( \\ddot{z} + n^2 z = 0 \\) — with \\( x \\) radial, \\( y \\) along-track, \\( z \\) cross-track."},
+        {"front": "Why is the cross-track (z) motion special in the CW model?", "back": "It decouples into a simple harmonic oscillator at the orbital frequency \\( n \\) — out-of-plane motion just oscillates, independent of in-plane motion."},
+        {"front": "What causes the constant along-track drift in CW solutions?", "back": "A radial offset or energy difference: a chaser in a slightly lower orbit has a shorter period and drifts ahead. The drift term \\( \\propto (6nx_0 + 3\\dot{y}_0)t \\) captures this."},
+        {"front": "What are the two key assumptions behind CW?", "back": "(1) Target orbit is circular; (2) separation is small compared to orbit radius, so gravity can be linearized about the target. Violate either and accuracy degrades."},
+        {"front": "How are CW solutions used for rendezvous targeting?", "back": "The closed-form state transition matrix gives \\( \\delta\\mathbf{r}(t) \\) from initial conditions; inverting the position partition yields the \\( \\delta\\mathbf{v}_0 \\) needed to arrive at a desired point at time \\( t \\) — a linear two-impulse targeting scheme."}
+      ],
+      "quiz": [
+        {"question": "In the CW frame, the x, y, z axes conventionally point:", "options": ["North, East, Down", "Radial (outward), along-track, cross-track", "Toward the sun, velocity, normal", "Periapsis, Q, angular momentum"], "correctIndex": 1, "explanation": "The LVLH/Hill frame: radial from Earth's center through the target, along-track roughly along velocity, cross-track along the orbit normal completing the triad."},
+        {"question": "A chaser is placed slightly below the target with zero relative velocity. Over time it will:", "options": ["Stay fixed relative to the target", "Drift ahead of the target", "Drift behind the target", "Oscillate radially only"], "correctIndex": 1, "explanation": "Lower orbit → shorter period → the chaser laps the target: it moves ahead in the along-track direction. This is the basis of phasing."},
+        {"question": "Cross-track motion in the CW equations:", "options": ["Grows linearly with time", "Is a harmonic oscillation at the orbital rate, decoupled from in-plane motion", "Couples strongly with radial motion", "Damps out due to gravity"], "correctIndex": 1, "explanation": "\\( \\ddot{z} + n^2 z = 0 \\) is an undamped oscillator; out-of-plane offsets never grow or decay in the linear model."},
+        {"question": "The CW equations lose accuracy when:", "options": ["The target orbit is circular", "The separation becomes a significant fraction of the orbit radius", "Time spans are short", "Motion is purely cross-track"], "correctIndex": 1, "explanation": "They come from linearizing gravity about the target; large separations (or eccentric target orbits) break the linearization."}
+      ]
+    },
+    {
+      "id": "patched",
+      "label": "Ch. 10 — Interplanetary: Patched Conics & Gravity Assists",
+      "query": "patched conic sphere of influence hyperbolic excess velocity gravity assist departure",
+      "flashcards": [
+        {"front": "What is the patched-conic method?", "back": "Split an interplanetary mission into sequential two-body problems — planetary departure hyperbola, heliocentric cruise ellipse, arrival hyperbola — 'patched' at each planet's sphere of influence."},
+        {"front": "Define the sphere of influence (SOI).", "back": "The region where a planet's gravity dominates over the sun's for computing the spacecraft's motion: \\( r_{SOI} \\approx a_p\\left(\\dfrac{m_p}{m_{sun}}\\right)^{2/5} \\). Inside: planet-centered conic; outside: heliocentric conic."},
+        {"front": "What is hyperbolic excess velocity \\( v_\\infty \\)?", "back": "The speed remaining 'at infinity' on a departure/arrival hyperbola: \\( v_\\infty^2 = v^2 - v_{esc}^2 \\). It equals the difference between heliocentric spacecraft velocity and the planet's velocity at the patch point."},
+        {"front": "What is C3?", "back": "Characteristic energy, \\( C_3 = v_\\infty^2 \\) — twice the specific energy of the departure hyperbola. Launch vehicle performance is quoted as payload mass vs C3."},
+        {"front": "How does a gravity assist change the spacecraft's heliocentric energy?", "back": "The flyby rotates \\( \\mathbf{v}_\\infty \\) in the planet's frame (magnitude unchanged), but adding the planet's heliocentric velocity before and after gives a different heliocentric speed — energy is exchanged with the planet's orbit."},
+        {"front": "For a Hohmann-like Earth–Mars transfer, what sets the departure \\( v_\\infty \\)?", "back": "The difference between the transfer ellipse's heliocentric speed at Earth's orbit and Earth's own heliocentric speed: \\( v_\\infty = v_{t}(r_E) - v_E \\)."}
+      ],
+      "quiz": [
+        {"question": "In patched conics, the spacecraft's trajectory inside a planet's SOI is modeled as:", "options": ["A heliocentric ellipse", "A planet-centered hyperbola (typically)", "A straight line", "A three-body trajectory"], "correctIndex": 1, "explanation": "Within the SOI only the planet's gravity is used; arrival/departure trajectories have \\( v > v_{esc} \\), so the conic is a hyperbola."},
+        {"question": "A gravity assist changes which property of \\( \\mathbf{v}_\\infty \\) in the planet's frame?", "options": ["Its magnitude", "Its direction only", "Both magnitude and direction", "Neither"], "correctIndex": 1, "explanation": "Energy relative to the planet is conserved on the flyby hyperbola, so \\( |v_\\infty| \\) is fixed; the turn angle rotates it — which changes the heliocentric velocity vector sum."},
+        {"question": "C3 = 0 corresponds to:", "options": ["A circular parking orbit", "Barely escaping the planet (parabolic departure)", "A high-energy hyperbola", "Immediate reentry"], "correctIndex": 1, "explanation": "\\( C_3 = v_\\infty^2 = 0 \\) means zero excess speed at infinity — exactly parabolic escape."},
+        {"question": "The phase angle at departure matters because:", "options": ["It sets launch azimuth", "The target planet must be positioned so both arrive at the same point at the same time", "It changes the SOI radius", "It determines C3 only"], "correctIndex": 1, "explanation": "Interplanetary transfers are rendezvous problems with planets — geometry at departure must place the target at the transfer's arrival point after the flight time."}
+      ]
+    },
+    {
+      "id": "attkin",
+      "label": "S&J Ch. 3 — Attitude Kinematics: DCM, Euler Angles, Quaternions",
+      "query": "direction cosine matrix Euler angles quaternion attitude kinematics singularity",
+      "flashcards": [
+        {"front": "What is a direction cosine matrix (DCM)?", "back": "A 3×3 orthonormal rotation matrix mapping vector components between frames, e.g. \\( \\mathbf{b} = [C]\\,\\mathbf{n} \\). Properties: \\( [C]^{-1} = [C]^T \\), \\( \\det[C] = +1 \\)."},
+        {"front": "Why do all three-parameter attitude sets have singularities?", "back": "The rotation group SO(3) cannot be covered globally by three parameters — every minimal parameterization has at least one orientation where the kinematics blow up (e.g., gimbal lock)."},
+        {"front": "Where is the singularity of the 3-2-1 Euler angle sequence?", "back": "At pitch \\( \\theta = \\pm 90° \\) — the first and third rotation axes align (gimbal lock), and the angle rates become indeterminate/infinite."},
+        {"front": "What are the four quaternion (Euler parameter) components?", "back": "\\( \\beta_0 = \\cos(\\Phi/2) \\), \\( \\boldsymbol{\\beta} = \\hat{\\mathbf{e}}\\sin(\\Phi/2) \\) — built from the principal rotation axis \\( \\hat{\\mathbf{e}} \\) and angle \\( \\Phi \\), with constraint \\( \\beta_0^2 + \\beta_1^2 + \\beta_2^2 + \\beta_3^2 = 1 \\)."},
+        {"front": "Why are quaternions preferred for onboard attitude software?", "back": "No singularities, no trigonometric evaluations in the kinematic equation (it is linear in the quaternion), and only one constraint to maintain (unit norm). Cost: four parameters and a ±q ambiguity."},
+        {"front": "State the quaternion kinematic differential equation conceptually.", "back": "\\( \\dot{\\boldsymbol{\\beta}} = \\frac{1}{2}[B(\\boldsymbol{\\beta})]\\,\\boldsymbol{\\omega} \\) — quaternion rates are a linear, singularity-free function of body angular velocity."},
+        {"front": "What does Euler's principal rotation theorem say?", "back": "Any attitude change can be achieved by a single rotation through angle \\( \\Phi \\) about a fixed axis \\( \\hat{\\mathbf{e}} \\) — the eigenvector of the DCM with eigenvalue +1."}
+      ],
+      "quiz": [
+        {"question": "The inverse of a DCM equals:", "options": ["Its negative", "Its transpose", "Its square", "It has no inverse"], "correctIndex": 1, "explanation": "DCMs are orthonormal: \\( [C][C]^T = I \\), so \\( [C]^{-1} = [C]^T \\) — a defining property of rotation matrices."},
+        {"question": "Gimbal lock in a 3-2-1 Euler sequence occurs when:", "options": ["Yaw = 90°", "Pitch = ±90°", "Roll = 180°", "All angles are zero"], "correctIndex": 1, "explanation": "At \\( \\theta = \\pm90° \\), the yaw and roll axes align; one rotational degree of freedom is lost and the kinematic equations divide by \\( \\cos\\theta = 0 \\)."},
+        {"question": "How many parameters and constraints do quaternions use to represent attitude?", "options": ["3 parameters, 0 constraints", "4 parameters, 1 constraint", "9 parameters, 6 constraints", "4 parameters, 0 constraints"], "correctIndex": 1, "explanation": "Four Euler parameters with the unit-norm constraint. (The DCM is the 9-parameter, 6-constraint representation.)"},
+        {"question": "The principal rotation axis \\( \\hat{\\mathbf{e}} \\) of a DCM is:", "options": ["Always the z-axis", "The eigenvector with eigenvalue +1", "Perpendicular to the rotation", "Undefined for large rotations"], "correctIndex": 1, "explanation": "The axis is unchanged by the rotation: \\( [C]\\hat{\\mathbf{e}} = \\hat{\\mathbf{e}} \\), i.e., eigenvalue +1 — Euler's theorem in linear-algebra form."}
+      ]
+    },
+    {
+      "id": "attdyn",
+      "label": "Kluever Ch. 12 — Attitude Dynamics & Torque-Free Motion",
+      "query": "Euler rotational equations torque-free motion principal axes polhode nutation spin stability",
+      "flashcards": [
+        {"front": "Write Euler's rotational equations for a rigid body in principal axes.", "back": "\\( I_1\\dot{\\omega}_1 = (I_2 - I_3)\\omega_2\\omega_3 + M_1 \\) (and cyclic permutations). Body-frame equations with gyroscopic coupling between axes."},
+        {"front": "What two quantities are conserved in torque-free rigid-body motion?", "back": "Rotational kinetic energy \\( T \\) and the angular momentum vector \\( \\mathbf{H} \\) (fixed in inertial space). In the body frame, \\( |\\mathbf{H}| \\) is constant but \\( \\mathbf{H} \\) moves — tracing the polhode."},
+        {"front": "What is the polhode?", "back": "The path traced by the angular velocity vector in the body frame during torque-free motion — the intersection of the energy ellipsoid and momentum ellipsoid."},
+        {"front": "State the major-axis rule.", "back": "For a rigid body with energy dissipation, spin is stable only about the axis of maximum moment of inertia. Intermediate-axis spin is always unstable; minor-axis spin destabilizes with any dissipation (Explorer 1's lesson)."},
+        {"front": "What is nutation for an axisymmetric spinning body?", "back": "The coning motion of the spin axis about the (inertially fixed) angular momentum vector when \\( \\boldsymbol{\\omega} \\) is not aligned with a principal axis — a wobble at a rate set by the inertia ratio."},
+        {"front": "Why is intermediate-axis spin unstable?", "back": "Linearizing Euler's equations about that spin gives a positive eigenvalue — small perturbations grow exponentially (the 'tennis racket theorem'). About major/minor axes the perturbations merely oscillate (for a truly rigid body)."},
+        {"front": "What is a gravity-gradient torque and its stable configuration?", "back": "Differential gravity across an extended body torques it toward aligning its minimum-inertia axis with the local vertical — enabling passive Earth-pointing stabilization for suitably shaped satellites."}
+      ],
+      "quiz": [
+        {"question": "In torque-free motion, the angular momentum vector \\( \\mathbf{H} \\):", "options": ["Is fixed in the body frame", "Is fixed in inertial space", "Spirals outward", "Aligns with \\( \\boldsymbol{\\omega} \\) always"], "correctIndex": 1, "explanation": "No external torque → \\( \\dot{\\mathbf{H}} = 0 \\) inertially. In the body frame it appears to move (the motion the polhode/body cone describes)."},
+        {"question": "A rigid spacecraft with energy dissipation (fuel slosh, flexible antennas) spinning about its minor axis will:", "options": ["Spin faster", "Remain stable", "Transition to a flat spin about the major axis", "Stop spinning"], "correctIndex": 2, "explanation": "Dissipation reduces kinetic energy at constant \\( H \\); minimum energy for given \\( H \\) is major-axis spin — the Explorer 1 failure mode."},
+        {"question": "The 'tennis racket theorem' refers to instability of rotation about the:", "options": ["Major axis", "Minor axis", "Intermediate axis", "Symmetry axis"], "correctIndex": 2, "explanation": "Euler's equations linearized about intermediate-axis spin yield exponential divergence — flip a racket about its middle axis and watch it tumble."},
+        {"question": "For an axisymmetric satellite in torque-free motion, \\( \\boldsymbol{\\omega} \\), \\( \\mathbf{H} \\), and the symmetry axis:", "options": ["Are mutually perpendicular", "All lie in one plane (coning together)", "Are always parallel", "Are unrelated"], "correctIndex": 1, "explanation": "The three vectors remain coplanar; the body and space cones rolling on each other describe the nutation geometry."}
+      ]
+    },
+    {
+      "id": "attctrl",
+      "label": "Kluever Ch. 12–13 — Spin Stabilization & Attitude Control",
+      "query": "reaction wheel momentum exchange attitude control feedback spin stabilization thruster",
+      "flashcards": [
+        {"front": "How does a reaction wheel control spacecraft attitude?", "back": "Momentum exchange: torquing the wheel one way applies an equal and opposite internal torque to the spacecraft body. Total angular momentum of the system is unchanged."},
+        {"front": "What is wheel momentum saturation and how is it fixed?", "back": "Persistent external disturbance torques force the wheel speed to grow until it hits its limit. Desaturation ('momentum dumping') uses external torques — thrusters or magnetic torquers — to unload the stored momentum."},
+        {"front": "Why does a PD control law suit attitude maneuvers?", "back": "Proportional term drives the attitude error to zero; derivative (rate) term adds damping so the response doesn't oscillate — giving the closed loop a chosen natural frequency and damping ratio."},
+        {"front": "Dual-spin stabilization: what is it and why use it?", "back": "A spinning rotor section provides gyroscopic stiffness while a despun platform points payloads (antennas, cameras) at a target — combining spin stability with pointing."},
+        {"front": "Compare thrusters vs reaction wheels for attitude control.", "back": "Thrusters: external torque, unlimited authority, consume propellant, typically on-off (bang-bang). Wheels: internal, smooth and precise, electrically powered, but saturate and cannot change total momentum."},
+        {"front": "What is gyroscopic stiffness in a spinning satellite?", "back": "A large stored \\( \\mathbf{H} \\) resists reorientation — applied torques cause slow precession \\( \\boldsymbol{\\omega}_p = \\mathbf{M}/H \\) instead of direct tipping, so the spin axis holds direction passively."}
+      ],
+      "quiz": [
+        {"question": "When a reaction wheel spins up, the spacecraft body:", "options": ["Also spins up in the same direction", "Rotates the opposite way, conserving total angular momentum", "Is unaffected", "Translates"], "correctIndex": 1, "explanation": "Wheel torque is internal: \\( \\mathbf{H}_{total} \\) is constant, so momentum given to the wheel is taken from the body."},
+        {"question": "Reaction wheels alone CANNOT:", "options": ["Point a telescope precisely", "Perform a rest-to-rest slew", "Remove momentum accumulated from a secular external disturbance torque", "Provide smooth control torques"], "correctIndex": 2, "explanation": "Internal devices only redistribute momentum. A persistent external torque grows the system momentum, which must eventually be dumped with thrusters or magnetic torquers."},
+        {"question": "In a PD attitude controller, increasing the derivative (rate) gain primarily:", "options": ["Increases overshoot", "Adds damping and reduces oscillation", "Eliminates steady-state error from constant disturbances", "Slows the wheel"], "correctIndex": 1, "explanation": "The rate feedback acts like a damper on the closed-loop second-order dynamics; it shapes the damping ratio."},
+        {"question": "A spin-stabilized satellite subjected to a small constant transverse torque responds by:", "options": ["Tipping over rapidly", "Precessing slowly, its spin axis drifting at rate M/H", "Speeding up its spin", "Nutating unboundedly"], "correctIndex": 1, "explanation": "Gyroscopic behavior: torque causes the momentum vector to precess at \\( \\dot{\\theta} \\approx M/H \\); a large stored H makes the drift slow — the essence of spin stiffness."}
+      ]
+    },
+    {
+      "id": "groundtrack",
+      "label": "Ch. 2–3 — Ground Tracks & Orbit Geometry",
+      "query": "ground track longitude drift repeat ground track geostationary orbit geometry",
+      "flashcards": [
+        {"front": "Why do successive ground tracks of a LEO satellite shift westward?", "back": "Earth rotates eastward beneath the fixed (inertial) orbit plane. Each orbit, the track displaces west by approximately \\( \\Delta\\lambda = \\omega_E T \\) (Earth rotation rate times orbital period) — modified slightly by J2 nodal drift."},
+        {"front": "What latitude band does a ground track cover?", "back": "Latitudes between \\( -i \\) and \\( +i \\) (for prograde orbits) — the maximum latitude reached equals the inclination. A ground station at latitude above \\( i \\) is never directly overflown."},
+        {"front": "What defines a repeat ground track orbit?", "back": "The satellite completes an integer number of orbits in an integer number of (nodal) days: \\( j \\) revolutions per \\( k \\) days, so the track repeats exactly — useful for remote sensing revisit."},
+        {"front": "Why does a geostationary satellite appear fixed in the sky?", "back": "Circular, equatorial (\\( i = 0 \\)), with period equal to Earth's sidereal rotation (\\( a \\approx 42{,}164 \\) km): its angular rate matches Earth's, so the sub-satellite point never moves."},
+        {"front": "What does the ground track of an inclined geosynchronous orbit look like?", "back": "A figure-eight (analemma) centered on the equator at fixed longitude — the period matches Earth's rotation but inclination carries it north and south each day."}
+      ],
+      "quiz": [
+        {"question": "The maximum latitude reached by a satellite's ground track equals:", "options": ["90° always", "The orbit's inclination (for prograde orbits)", "The argument of perigee", "The RAAN"], "correctIndex": 1, "explanation": "The orbit plane makes angle \\( i \\) with the equator, so the sub-satellite point ranges over latitudes \\( \\pm i \\)."},
+        {"question": "A satellite in a 90-minute LEO has successive equator crossings displaced in longitude by about:", "options": ["0°", "22.5° westward", "22.5° eastward", "90° westward"], "correctIndex": 1, "explanation": "Earth rotates 360° in 24 h ≈ 15°/h; in 1.5 h it turns 22.5° eastward, shifting the track 22.5° west."},
+        {"question": "A geosynchronous orbit with nonzero inclination traces a ground track shaped like:", "options": ["A point", "A circle around the pole", "A figure-eight about the equator", "A straight line along a meridian"], "correctIndex": 2, "explanation": "The period matches Earth's rotation (fixed mean longitude) while inclination drives daily north-south motion — a figure-eight."},
+        {"question": "A repeat ground track requires:", "options": ["Zero eccentricity", "An integer ratio between orbital revolutions and Earth rotations (nodal days)", "Polar inclination", "A geostationary altitude"], "correctIndex": 1, "explanation": "j revs in k days brings the geometry back exactly, so the track overlays itself — the j/k resonance condition."}
+      ]
+    }
+  ]
+}
