@@ -1235,7 +1235,7 @@ const KEY_MASK = '••••••••••••••••••••';
 
 // ══════════════════ COURSE ACCESS GATE ══════════════════
 // Deterrent, not security: this is a client-side check on a static site.
-const GATE_HASH = '1f6ef5ed';
+const GATE_HASH = '286a46e';
 function gateHash(s) {
   let h = 5381;
   for (const c of s) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0;
