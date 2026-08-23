@@ -495,15 +495,52 @@ MathJax = {
 
   #ai-disclaimer {
     background: #FFF8E1;
-    border-top: 2px solid #FFD45C;
+    border-top: 1px solid #E8C04D;
     color: #654B20;
-    font-size: 13px;
-    line-height: 1.45;
-    padding: 8px 24px;
+    font-size: 11px;
+    line-height: 1.25;
+    padding: 4px 16px;
     text-align: center;
     flex-shrink: 0;
   }
   #ai-disclaimer strong { color: #4E3713; }
+
+  /* ── AI study-tool loading overlay ── */
+  #study-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 850;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(247, 249, 252, 0.76);
+    backdrop-filter: blur(2px);
+  }
+  #study-loading.hidden { display: none; }
+  .study-loading-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: min(420px, 100%);
+    padding: 18px 20px;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(0, 38, 93, 0.18);
+  }
+  .study-spinner {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    border: 4px solid #D6E4F2;
+    border-top-color: var(--psu-blue);
+    border-radius: 50%;
+    animation: study-spin 0.8s linear infinite;
+  }
+  .study-loading-text { font-size: 15px; font-weight: 600; color: var(--psu-navy); }
+  .study-loading-sub { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
+  @keyframes study-spin { to { transform: rotate(360deg); } }
 
   /* ── Scrollbar ── */
   #chat-area::-webkit-scrollbar { width: 4px; }
@@ -923,7 +960,7 @@ MathJax = {
 
     #input-bar { padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 8px; }
     #msg-input { padding: 11px 12px; }
-    #ai-disclaimer { font-size: 12px; padding: 7px 12px; text-align: left; }
+    #ai-disclaimer { font-size: 10.5px; padding: 4px 10px; text-align: left; }
     #footer-note { padding: 5px 12px; }
 
     #study-area { padding: 16px 12px; }
@@ -1075,6 +1112,16 @@ MathJax = {
   </div>
 </div>
 
+<div id="study-loading" class="hidden" role="status" aria-live="assertive" aria-label="AI generation in progress">
+  <div class="study-loading-card">
+    <div class="study-spinner" aria-hidden="true"></div>
+    <div>
+      <div class="study-loading-text" id="study-loading-text">Generating study materials…</div>
+      <div class="study-loading-sub">Fetching textbook context and waiting for your AI provider.</div>
+    </div>
+  </div>
+</div>
+
 <!-- Input -->
 <div id="input-bar">
   <button id="reset-btn" onclick="resetConversation()" title="New conversation" aria-label="Start a new conversation">
@@ -1087,7 +1134,7 @@ MathJax = {
 </div>
 
 <div id="ai-disclaimer" role="note" aria-label="AI accuracy notice">
-  <strong>AI accuracy notice:</strong> TYCHO may produce incomplete or incorrect responses. Verify equations, assumptions, citations, and results against course materials and instructor guidance.
+  <strong>AI notice:</strong> TYCHO can be wrong. Verify answers with course materials and instructor guidance.
 </div>
 
 <div id="footer-note">
@@ -2805,6 +2852,16 @@ function modelQualityNote() {
     The curated flashcards and quizzes above always work, no AI needed.</div>`;
 }
 
+function setStudyLoading(active, message = 'Generating study materials…') {
+  const overlay = document.getElementById('study-loading');
+  const label = document.getElementById('study-loading-text');
+  if (!overlay || !label) return;
+  label.textContent = message;
+  overlay.classList.toggle('hidden', !active);
+  document.getElementById('study-area').setAttribute('aria-busy', String(active));
+  document.querySelectorAll('.study-tool-btn').forEach(button => { button.disabled = active; });
+}
+
 async function generateFresh(kind) {
   const t = currentTopic();
   if (!t) return;
@@ -2818,7 +2875,8 @@ async function generateFresh(kind) {
     return;
   }
   const status = document.getElementById('gen-status');
-  status.innerHTML = '<div class="study-empty">Generating from the course textbook…</div>';
+  const itemLabel = kind === 'flashcards' ? 'new flashcards' : 'a new quiz';
+  setStudyLoading(true, `Generating ${itemLabel}…`);
   const generationStarted = performance.now();
 
   const rag = typeof TychoRAG !== 'undefined' ? TychoRAG.retrieve(t.query, 4) : { context: '' };
@@ -2830,6 +2888,7 @@ async function generateFresh(kind) {
       reason: 'no_reliable_textbook_section',
       coverage_level: 'outside_textbook_support'
     });
+    setStudyLoading(false);
     status.innerHTML = '<div class="study-note">TYCHO could not find a reliable Kluever or Schaub &amp; Junkins section for this generated material, so it was not created.</div>';
     return;
   }
@@ -2857,6 +2916,7 @@ async function generateFresh(kind) {
   let lastError = null;
   for (let attempt = 0; attempt < 2 && !items; attempt++) {
     try {
+      if (attempt > 0) setStudyLoading(true, 'Checking the AI response and trying once more…');
       const extra = attempt === 0 ? '' : ' Your previous output was not valid JSON. Output ONLY the raw JSON array, nothing else.';
       const reply = await callStudyLLM(prompts[kind] + extra, sys);
       const parsed = parseJsonArray(reply);
@@ -2885,6 +2945,7 @@ async function generateFresh(kind) {
       coverage_level: rag.coverageLevel || 'unclassified',
       retrieved_references: rag.sections || []
     });
+    setStudyLoading(false);
     status.innerHTML = modelQualityNote();
     return;
   }
@@ -2900,6 +2961,7 @@ async function generateFresh(kind) {
     coverage_level: rag.coverageLevel || 'unclassified',
     retrieved_references: rag.sections || []
   });
+  setStudyLoading(false);
   status.innerHTML = '';
   if (kind === 'flashcards') startFlashcards(items, 'generated');
   else startQuiz(items);
@@ -2920,7 +2982,7 @@ async function generateStudyGuide() {
     });
     return;
   }
-  area.innerHTML = '<div class="study-empty">Building your study guide from the course textbook…</div>';
+  setStudyLoading(true, 'Building your study guide…');
   const generationStarted = performance.now();
 
   const rag = typeof TychoRAG !== 'undefined' ? TychoRAG.retrieve(t.query, 4) : { context: '' };
@@ -2932,6 +2994,7 @@ async function generateStudyGuide() {
       reason: 'no_reliable_textbook_section',
       coverage_level: 'outside_textbook_support'
     });
+    setStudyLoading(false);
     area.innerHTML = '<div class="study-note">TYCHO could not find a reliable Kluever or Schaub &amp; Junkins section for this study guide, so it was not created.</div>';
     return;
   }
@@ -2952,6 +3015,7 @@ async function generateStudyGuide() {
 
   try {
     const reply = await callStudyLLM(prompt, sys);
+    setStudyLoading(false);
     logEvent('generated_study_completed', {
       kind: 'study_guide',
       topic_id: t.id,
@@ -2973,6 +3037,7 @@ async function generateStudyGuide() {
     };
     if (window.MathJax) MathJax.typesetPromise([area]).catch(console.error);
   } catch (err) {
+    setStudyLoading(false);
     logEvent('generated_study_failed', {
       kind: 'study_guide',
       topic_id: t.id,
