@@ -1,0 +1,241 @@
+{
+  "version": "2026-08-23",
+  "authority": "AERSP 450 Fall 2025 syllabus",
+  "purpose": "Provide soft course-emphasis signals for retrieval and curated study tools without treating the broad syllabus as an exhaustive content boundary.",
+  "scope_policy": {
+    "syllabus_role": "soft_relevance_only",
+    "retrieval_policy": "Search the full supplied textbook corpus. Syllabus topic and section mappings may boost ranking but must not exclude other textbook material.",
+    "chat_policy": "Teach content supported by the supplied Kluever and Schaub & Junkins textbooks. Do not supplement content questions with outside model knowledge; if no reliable textbook section is found, request a chapter/section or textbook terminology instead of answering.",
+    "study_tools_policy": "Curated flashcards, quizzes, and exam-review lists may remain narrower than conversational help.",
+    "coverage_levels": [
+      "syllabus_emphasis",
+      "textbook_supported",
+      "outside_textbook_support"
+    ]
+  },
+  "excluded_syllabus_content": [
+    "dates and meeting times",
+    "assignment deadlines",
+    "grade weights and percentages",
+    "contact details",
+    "general university policies"
+  ],
+  "course_emphasis": [
+    "physics and the use of equations in solving problems",
+    "two-body analysis and conics as the primary orbital model",
+    "mission analysis and trajectory design",
+    "analysis of orbital and attitude dynamics and stability",
+    "assessment of basic control schemes"
+  ],
+  "learning_outcomes": [
+    {
+      "id": "describe_orbit",
+      "label": "Describe orbital motion",
+      "description": "Derive equations of motion using appropriate variables and explain the assumptions and approximations involved."
+    },
+    {
+      "id": "estimate_orbit",
+      "label": "Estimate orbital parameters",
+      "description": "Use telescope and radar observations to determine orbital parameters in appropriate coordinate frames."
+    },
+    {
+      "id": "control_orbit",
+      "label": "Control orbit",
+      "description": "Design and implement impulsive maneuvers that change orbital shape, size, and orientation."
+    },
+    {
+      "id": "describe_attitude",
+      "label": "Describe rotational motion",
+      "description": "Analyze free and forced rigid-body rotational dynamics in different coordinate systems."
+    },
+    {
+      "id": "estimate_attitude",
+      "label": "Estimate attitude",
+      "description": "Determine spacecraft attitude using inertial- and body-frame sensor observations."
+    },
+    {
+      "id": "control_attitude",
+      "label": "Control attitude",
+      "description": "Analyze and simulate attitude stabilization and control maneuvers, including reaction-wheel methods."
+    }
+  ],
+  "topics": [
+    {
+      "id": "orbital_motion",
+      "label": "Orbital mechanics and Keplerian motion",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "two-body problem",
+        "fundamental integrals",
+        "geometry of conic sections",
+        "orbital elements",
+        "F and G solutions",
+        "ground tracks"
+      ],
+      "query_terms": [
+        "two body", "twobody", "kepler", "conic", "ellipse", "elliptic", "parabola", "parabolic",
+        "hyperbola", "hyperbolic", "orbital energy", "specific energy", "angular momentum", "vis viva",
+        "visviva", "semimajor", "semi major", "eccentricity", "periapsis", "perigee", "apoapsis",
+        "apogee", "true anomaly", "eccentric anomaly", "mean anomaly", "orbital element", "raan",
+        "argument of perigee", "inclination", "f and g", "lagrange coefficient", "ground track", "eci",
+        "ecef", "perifocal", "coordinate frame"
+      ],
+      "section_patterns": {
+        "K": ["^(2\\.|3\\.[2-6](?:\\.|\\s|$)|4\\.[1-5](?:\\.|\\s|$))"],
+        "SJ": ["^8\\.[1-5](?:\\.|\\s|$)"]
+      }
+    },
+    {
+      "id": "orbital_maneuvers",
+      "label": "Orbital maneuvers and mission trajectory design",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "single-impulse maneuvers",
+        "in-plane and out-of-plane maneuvers",
+        "patched-conic methods",
+        "Lambert's problem"
+      ],
+      "query_terms": [
+        "maneuver", "manoeuvre", "burn", "impulse", "delta v", "deltav", "hohmann", "bi elliptic",
+        "transfer orbit", "plane change", "inclination change", "in plane", "out of plane", "lambert",
+        "patched conic", "sphere of influence", "hyperbolic excess", "vinfinity", "v infinity", "c3",
+        "planetary departure", "planetary arrival", "mission trajectory"
+      ],
+      "section_patterns": {
+        "K": ["^7\\.", "^4\\.6(?:\\.|\\s|$)", "^10\\.[1-5](?:\\.|\\s|$)"],
+        "SJ": ["^12\\.[1-5](?:\\.|\\s|$)"]
+      }
+    },
+    {
+      "id": "orbit_determination",
+      "label": "Orbit determination",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "radar observations",
+        "optical observations",
+        "Gauss' method",
+        "Gibbs' method"
+      ],
+      "query_terms": [
+        "orbit determination", "radar observation", "optical observation", "angles only", "gauss method",
+        "gauss orbit", "gibbs method", "three position vectors", "observation data", "topocentric",
+        "ground station", "state estimation"
+      ],
+      "section_patterns": {
+        "K": ["^3\\.[7-9](?:\\.|\\s|$)"],
+        "SJ": []
+      }
+    },
+    {
+      "id": "attitude_kinematics",
+      "label": "Attitude kinematics",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "direction cosine matrices",
+        "Euler angles",
+        "other attitude coordinate choices"
+      ],
+      "query_terms": [
+        "attitude kinematics", "direction cosine matrix", "dcm", "euler angle", "gimbal lock", "quaternion",
+        "euler parameter", "principal rotation", "rotation vector", "rodrigues", "mrp", "crp",
+        "attitude coordinate", "attitude parameter", "rotation matrix", "body frame", "inertial frame"
+      ],
+      "section_patterns": {
+        "K": [],
+        "SJ": ["^3\\."]
+      }
+    },
+    {
+      "id": "attitude_estimation",
+      "label": "Attitude estimation from vector observations",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "attitude estimation from vector observations",
+        "inertial-frame and body-frame sensor data"
+      ],
+      "query_terms": [
+        "attitude estimation", "attitude determination", "vector observation", "vector observations",
+        "inertial sensor", "body frame sensor", "sun sensor", "star tracker", "magnetometer", "triad",
+        "wahba", "sensor observation"
+      ],
+      "section_patterns": {
+        "K": [],
+        "SJ": []
+      },
+      "textbook_coverage": "not_identified",
+      "coverage_note": "The supplied textbook chunks do not contain a clearly identified attitude-estimation chapter. Under the textbook-only policy, TYCHO should request an approved chapter or section rather than teach this topic from outside model knowledge."
+    },
+    {
+      "id": "attitude_dynamics_control",
+      "label": "Attitude dynamics, stability, and reaction-wheel control",
+      "status": "core",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "Euler's equations",
+        "torque-free rigid-body motion",
+        "attitude stability",
+        "attitude control with reaction wheels"
+      ],
+      "query_terms": [
+        "euler equation", "rotational equation", "rigid body dynamics", "torque free", "angular velocity",
+        "principal axis", "moment of inertia", "inertia tensor", "rotational kinetic energy", "polhode",
+        "nutation", "attitude stability", "spin stability", "tennis racket", "reaction wheel",
+        "momentum wheel", "momentum exchange", "wheel saturation", "momentum dumping", "attitude control",
+        "feedback control", "stabilization", "nutation damping", "nutation damper", "body cone",
+        "space cone", "polhode", "herpolhode"
+      ],
+      "section_patterns": {
+        "K": ["^12\\.[1-4](?:\\.|\\s|$)", "^13\\.[1-4](?:\\.|\\s|$)"],
+        "SJ": ["^4\\.[1-3](?:\\.|\\s|$)", "^7\\.6(?:\\.|\\s|$)"]
+      }
+    },
+    {
+      "id": "non_keplerian_optional",
+      "label": "Non-Keplerian motion",
+      "status": "time_permitting",
+      "retrieval_enabled": true,
+      "syllabus_topics": [
+        "perturbing forces",
+        "restricted three-body problem"
+      ],
+      "query_terms": [
+        "perturbation", "perturbing force", "j2", "oblateness", "atmospheric drag", "solar radiation pressure",
+        "third body", "three body", "restricted three body", "lagrange point", "libration point", "jacobi integral"
+      ],
+      "section_patterns": {
+        "K": ["^5\\."],
+        "SJ": ["^(9\\.|10\\.|11\\.)"]
+      },
+      "coverage_note": "The syllabus marks this material as time permitting, but it remains available for teaching and textbook retrieval. Do not automatically present it as an exam emphasis."
+    }
+  ],
+  "study_tools": {
+    "enabled_topic_ids": [
+      "twobody",
+      "elements",
+      "kepler",
+      "maneuvers",
+      "orbitdet",
+      "patched",
+      "attkin",
+      "attdyn",
+      "attctrl",
+      "groundtrack"
+    ],
+    "disabled_topic_ids": [
+      "attest",
+      "perturb",
+      "relative"
+    ],
+    "disabled_reason": {
+      "attest": "No clearly identified supporting section exists in the supplied textbook chunks; enable after adding an approved Kluever/Schaub section.",
+      "perturb": "Not currently included in the curated study bank; still available in chat and textbook retrieval.",
+      "relative": "Not currently included in the curated study bank; still available in chat and textbook retrieval."
+    }
+  }
+}
