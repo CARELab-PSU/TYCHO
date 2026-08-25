@@ -907,6 +907,58 @@ MathJax = {
   .gate-err { font-size: 12.5px; color: #C62828; min-height: 16px; }
   .gate-hint { font-size: 11.5px; color: var(--text-muted); }
 
+  /* ── Consent start screen ── */
+  .consent {
+    position: fixed; inset: 0; z-index: 9998;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--psu-navy);
+    padding: 20px;
+  }
+  .consent.hidden { display: none; }
+  .consent-card {
+    background: #fff; border-radius: 16px; padding: 34px 30px;
+    max-width: 460px; width: 100%;
+    box-shadow: 0 18px 50px rgba(0,0,0,.28);
+    text-align: left;
+  }
+  .consent-logo { font-size: 34px; text-align: center; }
+  .consent-title {
+    font-size: 20px; font-weight: 700; color: var(--psu-navy);
+    text-align: center; margin-top: 4px;
+  }
+  .consent-body {
+    font-size: 14px; line-height: 1.55; color: var(--text-secondary);
+    margin: 16px 0 6px;
+  }
+  .consent-body b { color: var(--psu-navy); }
+  .consent-list {
+    font-size: 13px; line-height: 1.5; color: var(--text-secondary);
+    margin: 10px 0 4px; padding-left: 18px;
+  }
+  .consent-list li { margin-bottom: 4px; }
+  .consent-actions {
+    display: flex; flex-direction: column; gap: 10px; margin-top: 20px;
+  }
+  .consent-btn {
+    padding: 13px 16px; border: none; border-radius: 10px;
+    font-size: 14.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background .15s, border-color .15s;
+  }
+  .consent-btn.primary { background: var(--psu-navy); color: #fff; }
+  .consent-btn.primary:hover { background: var(--psu-blue); }
+  .consent-btn.secondary {
+    background: #fff; color: var(--psu-navy);
+    border: 1.5px solid var(--psu-navy);
+  }
+  .consent-btn.secondary:hover { background: var(--psu-light); }
+  .consent-foot {
+    font-size: 11.5px; color: var(--text-muted); line-height: 1.5;
+    margin-top: 14px; text-align: center;
+  }
+  @media (max-width: 520px) {
+    .consent-card { padding: 26px 20px; }
+  }
+
   :focus-visible {
     outline: 3px solid var(--psu-blue);
     outline-offset: 2px;
@@ -1005,6 +1057,28 @@ MathJax = {
     <button class="gate-btn" onclick="checkGate()">Enter</button>
     <div class="gate-err" id="gate-err"></div>
     <div class="gate-hint">The access code is on the course Canvas page.</div>
+  </div>
+</div>
+
+<!-- Data-collection notice -->
+<div id="consent" class="consent hidden">
+  <div class="consent-card">
+    <div class="consent-logo">🔭</div>
+    <div class="consent-title">Heads up</div>
+    <div class="consent-body">
+      To help improve this tool, TYCHO collects an <b>anonymous log of your study session</b> —
+      your chat with TYCHO, the study modes and tools you use, and your quiz and flashcard activity.
+    </div>
+    <ul class="consent-list">
+      <li><b>No personal information is included</b> — not your name, email, login, PSU ID, or API key.</li>
+      <li>The log is used by the course instructor to improve TYCHO and understand how students learn with it.</li>
+    </ul>
+    <div class="consent-actions">
+      <button class="consent-btn primary" onclick="resolveConsent()">Got it — continue</button>
+    </div>
+    <div class="consent-foot">
+      You can save your own copy of any session anytime from the session menu.
+    </div>
   </div>
 </div>
 
@@ -1218,6 +1292,15 @@ const PROVIDERS = {
     keyUrl: 'https://ollama.com'
   }
 };
+
+// ══════════════════ ANONYMOUS SESSION SUBMISSION (opt-in) ══════════════════
+// Paste your submission URL between the quotes to turn this on (Power Automate or
+// Google Apps Script). While it is empty, the notice is skipped and nothing is
+// submitted — the app behaves exactly as before. See the setup guide for steps.
+const SUBMISSION_ENDPOINT = 'https://default7cf48d453ddb4389a9c1c115526eb5.2e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/5cefef9feccd43a099777fde8a585c9c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Y_I52DFfx7UuYcYT6oL6L4NLIN3CzOA-vPpHC7RBh5E';
+const NOTICE_VERSION = '2026.08-notice-1';
+let collectionConsent = false;      // true once the student acknowledges the notice this session
+let consentElapsedMs = null;
 
 // ── State ──
 const APP_VERSION = '2026.08.23-textbook-boundary-5';
@@ -1674,6 +1757,7 @@ function checkGate() {
   if (gateHash(v) === GATE_HASH) {
     localStorage.setItem('tycho_access', GATE_HASH);
     document.getElementById('gate').classList.add('hidden');
+    showConsent();   // ask for collection consent right after the student enters
   } else {
     document.getElementById('gate-err').textContent = 'Incorrect code — check the course Canvas page.';
     document.getElementById('gate-input').value = '';
@@ -1685,7 +1769,11 @@ window.onload = () => {
   if (localStorage.getItem('tycho_access') !== GATE_HASH) {
     document.getElementById('gate').classList.remove('hidden');
     document.getElementById('gate-input').focus();
+  } else {
+    showConsent();   // gate already cleared this browser → ask for consent now
   }
+  // Retry an unsent log from a previous session (safe: receiver de-dupes by session id).
+  flushPendingSubmission();
   // Build the textbook retrieval index (RAG). Non-blocking; chat works without it.
   const ragAvailable = typeof TychoRAG !== 'undefined';
   (ragAvailable ? TychoRAG.init('textbook_chunks.json', 'course_scope.json') : Promise.reject(new Error('retrieval script unavailable')))
@@ -2499,9 +2587,9 @@ function exportTranscript() {
   downloadFile(`tycho_session_${stamp()}.md`, md, 'text/markdown');
 }
 
-function exportSessionLog() {
-  toggleExportMenu();
-  logEvent('experience_log_exported', { event_count_before_export: experienceEvents.length });
+// Builds the full session-log object. Used by both the manual download and the
+// (opt-in) anonymous submission, so the two always carry identical, redacted data.
+function buildSessionLog(collectionText) {
   const conversation = conversationHistory.map((message, index) => ({
     position: index + 1,
     interaction_id: message.interaction_id,
@@ -2510,7 +2598,7 @@ function exportSessionLog() {
     text: sanitizeLogText(message.content),
     imported: Boolean(message.imported)
   }));
-  const log = {
+  return {
     schema_version: LOG_SCHEMA_VERSION,
     app: 'TYCHO',
     app_version: APP_VERSION,
@@ -2522,7 +2610,7 @@ function exportSessionLog() {
       final_mode: getMode()
     },
     privacy: {
-      collection: 'local session only; downloaded only when the student chooses Export',
+      collection: collectionText,
       deliberately_excluded: [
         'name or persistent student identifier',
         'email and login/account information',
@@ -2548,8 +2636,82 @@ function exportSessionLog() {
     conversation,
     events: experienceEvents
   };
+}
+
+function exportSessionLog() {
+  toggleExportMenu();
+  logEvent('experience_log_exported', { event_count_before_export: experienceEvents.length });
+  const log = buildSessionLog('local session only; downloaded only when the student chooses Export');
   downloadFile(`tycho_experience_${logSessionId.slice(0, 8)}.json`, JSON.stringify(log, null, 2), 'application/json');
 }
+
+// ══════════════════ ANONYMOUS SUBMISSION (only when the student consented) ══════════════════
+const PENDING_KEY = 'tycho_pending_submission';
+
+function submissionPayload() {
+  const log = buildSessionLog('anonymous session log, disclosed to students by notice and used by the instructor to improve the tool');
+  log.collection = {
+    basis: 'notice',
+    scope: 'single session',
+    notice_version: NOTICE_VERSION,
+    acknowledged_at_elapsed_ms: consentElapsedMs
+  };
+  return JSON.stringify(log);
+}
+
+// Fired as the page is closing/backgrounding. sendBeacon is built for exactly this
+// moment; text/plain avoids a CORS preflight that beacons and Apps Script can't do.
+// A copy is stashed locally so a missed beacon is retried on the next visit.
+function beaconSubmit() {
+  if (!collectionConsent || !SUBMISSION_ENDPOINT) return;
+  let payload;
+  try { payload = submissionPayload(); } catch (e) { return; }
+  try { localStorage.setItem(PENDING_KEY, payload); } catch (e) {}
+  try {
+    const blob = new Blob([payload], { type: 'text/plain;charset=utf-8' });
+    navigator.sendBeacon(SUBMISSION_ENDPOINT, blob);
+  } catch (e) {}
+}
+
+// On load, retry any log from a PREVIOUS session whose beacon may not have arrived.
+// The receiver de-duplicates by session id, so a double-send is harmless.
+function flushPendingSubmission() {
+  if (!SUBMISSION_ENDPOINT) return;
+  let pending;
+  try { pending = localStorage.getItem(PENDING_KEY); } catch (e) { return; }
+  if (!pending) return;
+  try {
+    if (JSON.parse(pending)?.session?.id === logSessionId) return; // current session — leave it for beaconSubmit
+  } catch (e) {}
+  fetch(SUBMISSION_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: pending,
+    keepalive: true
+  }).then(() => { try { localStorage.removeItem(PENDING_KEY); } catch (e) {} })
+    .catch(() => {});
+}
+
+// Data-collection notice handlers
+function showConsent() {
+  if (!SUBMISSION_ENDPOINT) return;   // submission not configured → don't show the notice
+  const el = document.getElementById('consent');
+  if (el) el.classList.remove('hidden');
+}
+function resolveConsent() {
+  collectionConsent = true;           // notice acknowledged → this session's log is collected
+  consentElapsedMs = Math.round(performance.now() - logSessionStarted);
+  logEvent('collection_notice_ack', { version: NOTICE_VERSION });
+  const el = document.getElementById('consent');
+  if (el) el.classList.add('hidden');
+  document.getElementById('msg-input')?.focus();
+}
+
+window.addEventListener('pagehide', beaconSubmit);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') beaconSubmit();
+});
 
 // ══════════════════ STUDY TOOLS ══════════════════
 let questionBank = null;
